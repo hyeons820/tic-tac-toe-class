@@ -7,7 +7,6 @@ using UnityEngine.UI;
 using DG.Tweening;
 
 [RequireComponent(typeof(CanvasGroup))]
-
 public class PopupPanelController : Singleton<PopupPanelController>
 {
     [SerializeField] private TMP_Text contentText;
@@ -15,16 +14,15 @@ public class PopupPanelController : Singleton<PopupPanelController>
     [SerializeField] private TMP_Text confirmButtonText;
     
     [SerializeField] private RectTransform panelRectTransform;
-    
-    private CanvasGroup _canvasGroup;
 
+    private CanvasGroup _canvasGroup;
+    
     private void Start()
     {
         _canvasGroup = GetComponent<CanvasGroup>();
-        
         Hide(false);
     }
-    
+
     public void Show(string content, string confirmButtonText, bool animation, Action confirmAction)
     {
         gameObject.SetActive(true);
@@ -60,7 +58,7 @@ public class PopupPanelController : Singleton<PopupPanelController>
             panelRectTransform.DOScale(0f, 0.2f).OnComplete(() =>
             {
                 contentText.text = "";
-                confirmButtonText.text = "";
+                this.confirmButtonText.text = "";
                 confirmButton.onClick.RemoveAllListeners();
         
                 gameObject.SetActive(false);
@@ -70,9 +68,9 @@ public class PopupPanelController : Singleton<PopupPanelController>
         else
         {
             contentText.text = "";
-            confirmButtonText.text = "";
+            this.confirmButtonText.text = "";
             confirmButton.onClick.RemoveAllListeners();
-        
+
             gameObject.SetActive(false);
         }
     }

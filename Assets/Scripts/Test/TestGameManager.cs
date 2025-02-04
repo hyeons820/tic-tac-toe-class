@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TestGameManager : MonoBehaviour
 {
+
     public void Open()
     {
         PopupPanelController.Instance.Show("Hello", "OK", true, () =>

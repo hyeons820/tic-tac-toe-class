@@ -4,25 +4,26 @@ using UnityEngine;
 
 class Animal
 {
-    public string Name{ get; set; }
+    public string Name { get; set; }
 
     public void Eat()
     {
-        Debug.Log(Name + " is eating");
+        Debug.Log(Name + " is eating.");
     }
 }
 
-// C#에서 다중 상속은 안 된다. 콤마 이후에 적는 건 인터페이스
-class Dog : Animal // , (인터페이스)
+class Dog : Animal
 {
     public void Bark()
     {
-        Debug.Log(Name + " is barking");
+        Debug.Log(Name + " is barking.");
     }
 }
 
 
-// 참조에 관한 예
+
+
+
 class A
 {
     public A()
@@ -39,10 +40,9 @@ class A
 
 class B
 {
-    public delegate void RunDelegate(); // delegate : 대리자
+    public delegate void RunDelegate();
     public RunDelegate AfterRun;
 
-    // 생성자
     public B(RunDelegate afterRun)
     {
         AfterRun = afterRun;
@@ -55,6 +55,12 @@ class B
     }
 }
 
+
+
+
+
+
+
 public class Test : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -65,8 +71,7 @@ public class Test : MonoBehaviour
         dog.Eat();
         dog.Bark();
 
-        // 업캐스팅
-        Animal animal = new Dog(); // 도그의 함수 사용 불가능, 애니멀 타입의 변수 도그값 참조
+        Animal animal = new Dog();
     }
 
     // Update is called once per frame
@@ -84,7 +89,7 @@ public class Test : MonoBehaviour
             return;
         }
         
-        Debug.Log("count: " + count);
+        Debug.Log("Count: " + count);
         RecursiveFunction(count - 1);
     }
 }
