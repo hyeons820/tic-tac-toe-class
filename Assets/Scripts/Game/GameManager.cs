@@ -8,11 +8,12 @@ public class GameManager : Singleton<GameManager>
 {
     [SerializeField] private BlockController blockController;
     [SerializeField] private PanelManager panelManager;
+    [SerializeField] private GamePlayPanelController gamePlayPanelController;
     
     public enum PlayerType { None, PlayerA, PlayerB }
     private PlayerType[,] _board;
 
-    private enum TurnType { PlayerA, PlayerB }
+    public enum TurnType { PlayerA, PlayerB }
 
     private enum GameResult
     {
@@ -102,6 +103,7 @@ public class GameManager : Singleton<GameManager>
         {
             case TurnType.PlayerA:
                 Debug.Log("Player A Turn");
+                gamePlayPanelController.SetPlayerTurnColor(TurnType.PlayerA);
                 blockController.onBlockClickedDelegate = (row, col) =>
                 {
                     if (_board[row, col] == PlayerType.None)
@@ -128,6 +130,7 @@ public class GameManager : Singleton<GameManager>
                 break;
             case TurnType.PlayerB:
                 Debug.Log("Player B Turn");
+                gamePlayPanelController.SetPlayerTurnColor(TurnType.PlayerB);
                 blockController.onBlockClickedDelegate = (row, col) =>
                 {
                     if (_board[row, col] == PlayerType.None)

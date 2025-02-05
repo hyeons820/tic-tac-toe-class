@@ -45,11 +45,11 @@ public class BlockController : MonoBehaviour
         foreach (var blockPosition in blockPositions)
         {
             var blockIndex = blockPosition.row * 3 + blockPosition.col;
-            Color markerColor;
+            Color32 markerColor;
             if (playerType == GameManager.PlayerType.PlayerA)
-                markerColor = Color.green;
+                markerColor = new Color32(0, 166, 255, 255);
             else if (playerType == GameManager.PlayerType.PlayerB)
-                markerColor = Color.red;
+                markerColor = new Color32(255, 0, 94, 255);
             else
                 markerColor = Color.black;
             
