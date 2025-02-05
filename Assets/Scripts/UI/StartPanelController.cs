@@ -9,4 +9,6 @@ public class StartPanelController : PanelController
         GameManager.Instance.StartGame();
         Hide();
     }
+    
+    public 
 }
