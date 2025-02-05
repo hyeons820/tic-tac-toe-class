@@ -8,7 +8,7 @@ public class PanelManager : MonoBehaviour
     [SerializeField] private PanelController confirmPanelController;
     [SerializeField] private PanelController settingsPanelController;
     
-    public enum PanelType { StartPanel, ConfirmPanel, SettingsPanel, GamePlayPanel }
+    public enum PanelType { StartPanel, ConfirmPanel, SettingsPanel }
     private PanelController _currentPanelController;
     
     /// <summary>

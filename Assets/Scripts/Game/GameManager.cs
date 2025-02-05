@@ -8,12 +8,12 @@ public class GameManager : Singleton<GameManager>
 {
     [SerializeField] private BlockController blockController;
     [SerializeField] private PanelManager panelManager;
-    [SerializeField] private GamePlayPanelController gamePlayPanelController;
+    [SerializeField] private GameUIController gameUIController;
     
     public enum PlayerType { None, PlayerA, PlayerB }
     private PlayerType[,] _board;
 
-    public enum TurnType { PlayerA, PlayerB }
+    private enum TurnType { PlayerA, PlayerB }
 
     private enum GameResult
     {
@@ -42,6 +42,9 @@ public class GameManager : Singleton<GameManager>
         
         // Start Panel 표시
         panelManager.ShowPanel(PanelManager.PanelType.StartPanel);
+        
+        // Game UI 초기화
+        gameUIController.SetGameUIMode(GameUIController.GameUIMode.Init);
     }
 
     /// <summary>
@@ -59,6 +62,10 @@ public class GameManager : Singleton<GameManager>
     /// <param name="gameResult">win, lose, draw</param>
     private void EndGame(GameResult gameResult)
     {
+        // 게임오버 표시
+        gameUIController.SetGameUIMode(GameUIController.GameUIMode.GameOver);
+        
+        // TODO: 나중에 구현!!
         switch (gameResult)
         {
             case GameResult.Win:
@@ -102,8 +109,7 @@ public class GameManager : Singleton<GameManager>
         switch (turnType)
         {
             case TurnType.PlayerA:
-                Debug.Log("Player A Turn");
-                gamePlayPanelController.SetPlayerTurnColor(TurnType.PlayerA);
+                gameUIController.SetGameUIMode(GameUIController.GameUIMode.TurnA);
                 blockController.onBlockClickedDelegate = (row, col) =>
                 {
                     if (_board[row, col] == PlayerType.None)
@@ -117,7 +123,6 @@ public class GameManager : Singleton<GameManager>
                             {
                                 EndGame(gameResult);
                             }
-
                         }
                     }
                     else
@@ -129,8 +134,7 @@ public class GameManager : Singleton<GameManager>
                 };
                 break;
             case TurnType.PlayerB:
-                Debug.Log("Player B Turn");
-                gamePlayPanelController.SetPlayerTurnColor(TurnType.PlayerB);
+                gameUIController.SetGameUIMode(GameUIController.GameUIMode.TurnB);
                 blockController.onBlockClickedDelegate = (row, col) =>
                 {
                     if (_board[row, col] == PlayerType.None)
@@ -144,7 +148,6 @@ public class GameManager : Singleton<GameManager>
                             {
                                 EndGame(gameResult);
                             }
-
                         }
                     }
                     else
