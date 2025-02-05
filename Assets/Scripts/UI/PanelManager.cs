@@ -43,7 +43,10 @@ public class PanelManager : MonoBehaviour
         {
             _currentPanelController.Hide();
         }
-        panelController.Show();
+        panelController.Show(() =>
+        {
+            _currentPanelController = null;
+        });
         _currentPanelController = panelController;
     }
 }

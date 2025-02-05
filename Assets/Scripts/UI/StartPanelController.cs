@@ -4,11 +4,19 @@ using UnityEngine;
 
 public class StartPanelController : PanelController
 {
-    public void OnClickStartButton()
+    public void OnClickSinglePlayButton()
     {
         GameManager.Instance.StartGame();
         Hide();
     }
-    
-    public 
+
+    public void OnClickDualPlayButton()
+    {
+        
+    }
+
+    public void OnClickSettingsButton()
+    {
+        
+    }
 }

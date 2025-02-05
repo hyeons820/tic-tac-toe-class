@@ -7,6 +7,9 @@ public class PanelController : MonoBehaviour
 {
     public bool IsShow { get; private set; }
     
+    public delegate void OnHide();
+    private OnHide _onHideDelegate;
+    
     private RectTransform _rectTransform;
     private Vector2 _hideAnchorPosition;
 
@@ -20,8 +23,9 @@ public class PanelController : MonoBehaviour
     /// <summary>
     /// Panel 표시 함수
     /// </summary>
-    public void Show()
+    public void Show(OnHide onHideDelegate)
     {
+        _onHideDelegate = onHideDelegate;
         _rectTransform.anchoredPosition = Vector2.zero;
         IsShow = true;
     }
@@ -33,5 +37,6 @@ public class PanelController : MonoBehaviour
     {
         _rectTransform.anchoredPosition = _hideAnchorPosition;
         IsShow = false;
+        _onHideDelegate?.Invoke();
     }
 }
