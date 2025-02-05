@@ -35,4 +35,25 @@ public class BlockController : MonoBehaviour
         // Block에게 마커 표시
         blocks[markerIndex].SetMarker(markerType);
     }
+    
+    
+    public void SetBlockColor(GameManager.PlayerType playerType, 
+        (int row, int col)[] blockPositions)
+    {
+        if (playerType == GameManager.PlayerType.None) return;
+
+        foreach (var blockPosition in blockPositions)
+        {
+            var blockIndex = blockPosition.row * 3 + blockPosition.col;
+            Color markerColor;
+            if (playerType == GameManager.PlayerType.PlayerA)
+                markerColor = Color.green;
+            else if (playerType == GameManager.PlayerType.PlayerB)
+                markerColor = Color.red;
+            else
+                markerColor = Color.black;
+            
+            blocks[blockIndex].SetColor(markerColor);
+        }
+    }
 }

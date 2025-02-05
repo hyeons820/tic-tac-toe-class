@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
+[RequireComponent(typeof(SpriteRenderer))]
 public class Block : MonoBehaviour
 {
     [SerializeField] private Sprite oSprite;
@@ -10,9 +11,27 @@ public class Block : MonoBehaviour
     public enum MarkerType { None, O, X }
 
     public delegate void OnBlockClicked(int index);
-    public OnBlockClicked onBlockClicked;
+    private OnBlockClicked _onBlockClicked;
+    
     private int _blockIndex;
+    private SpriteRenderer _spriteRenderer;
+    private Color _defaultColor;
 
+    private void Awake()
+    {
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _defaultColor = _spriteRenderer.color;
+    }
+    
+    /// <summary>
+    /// 블럭의 색상을 변경하는 함수
+    /// </summary>
+    /// <param name="color">색상</param>
+    public void SetColor(Color color)
+    {
+        _spriteRenderer.color = color;
+    }
+    
     /// <summary>
     /// Block 초기화 함수
     /// </summary>
@@ -22,7 +41,8 @@ public class Block : MonoBehaviour
     {
         _blockIndex = blockIndex;
         SetMarker(MarkerType.None);
-        this.onBlockClicked = onBlockClicked;
+        this._onBlockClicked = onBlockClicked;
+        SetColor(_defaultColor);
     }
     
     /// <summary>
@@ -47,6 +67,6 @@ public class Block : MonoBehaviour
 
     private void OnMouseUpAsButton()
     {
-        onBlockClicked?.Invoke(_blockIndex);
+        _onBlockClicked?.Invoke(_blockIndex);
     }
 }
