@@ -17,7 +17,7 @@ public class GameManager : Singleton<GameManager>
     public enum PlayerType { None, PlayerA, PlayerB }
     private PlayerType[,] _board;
 
-    private enum TurnType { None, PlayerA, PlayerB }
+    private enum TurnType { PlayerA, PlayerB }
 
     private enum GameResult
     {
@@ -85,6 +85,7 @@ public class GameManager : Singleton<GameManager>
     {
         // 게임오버 표시
         _gameUIController.SetGameUIMode(GameUIController.GameUIMode.GameOver);
+        _blockController.onBlockClickedDelegate = null;
         
         // TODO: 나중에 구현!!
         switch (gameResult)
@@ -110,6 +111,8 @@ public class GameManager : Singleton<GameManager>
     /// <returns>False가 반환되면 할당할 수 없음, True는 할당이 완료됨</returns>
     private bool SetNewBoardValue(PlayerType playerType, int row, int col)
     {
+        if (_board[row, col] != PlayerType.None) return false;
+        
         if (playerType == PlayerType.PlayerA)
         {
             _board[row, col] = playerType;
@@ -132,60 +135,35 @@ public class GameManager : Singleton<GameManager>
             case TurnType.PlayerA:
                 _gameUIController.SetGameUIMode(GameUIController.GameUIMode.TurnA);
                 _blockController.onBlockClickedDelegate = (row, col) =>
-                {
-                    if (_board[row, col] == PlayerType.None)
-                    {
-                        if (SetNewBoardValue(PlayerType.PlayerA, row, col))
+                { 
+                    if (SetNewBoardValue(PlayerType.PlayerA, row, col))
+                    { 
+                        var gameResult = CheckGameResult();
+                        if (gameResult == GameResult.None)
+                            SetTurn(TurnType.PlayerB);
+                        else 
                         {
-                            var gameResult = CheckGameResult();
-                            if (gameResult == GameResult.None)
-                                SetTurn(TurnType.PlayerB);
-                            else
-                            {
-                                SetTurn(TurnType.None);
-                                EndGame(gameResult);
-                            }
+                            EndGame(gameResult);
                         }
                     }
-                    else
-                    {
-                        _blockController.onBlockClickedDelegate = null;
-                        SetTurn(TurnType.PlayerA);
-                    }
-                    
                 };
                 break;
             case TurnType.PlayerB:
                 _gameUIController.SetGameUIMode(GameUIController.GameUIMode.TurnB);
                 _blockController.onBlockClickedDelegate = (row, col) =>
                 {
-                    if (_board[row, col] == PlayerType.None)
+                    if (SetNewBoardValue(PlayerType.PlayerB, row, col))
                     {
-                        if (SetNewBoardValue(PlayerType.PlayerB, row, col))
+                        var gameResult = CheckGameResult();
+                        if (gameResult == GameResult.None)
+                            SetTurn(TurnType.PlayerA);
+                        else
                         {
-                            var gameResult = CheckGameResult();
-                            if (gameResult == GameResult.None)
-                                SetTurn(TurnType.PlayerA);
-                            else
-                            {
-                                SetTurn(TurnType.None);
-                                EndGame(gameResult);
-                            }
+                            EndGame(gameResult);
                         }
-                    }
-                    else
-                    {
-                        _blockController.onBlockClickedDelegate = null;
-                        SetTurn(TurnType.PlayerB);
                     }
                 };
                 break;
-            case TurnType.None:
-                _blockController.onBlockClickedDelegate = (row, col) =>
-                {
-                    _gameUIController.SetGameUIMode(GameUIController.GameUIMode.GameOver);
-                };
-            break;
         }
         
         // 게임 결과 확인
