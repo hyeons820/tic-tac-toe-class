@@ -17,7 +17,7 @@ public class GameManager : Singleton<GameManager>
     public enum PlayerType { None, PlayerA, PlayerB }
     private PlayerType[,] _board;
 
-    private enum TurnType { PlayerA, PlayerB }
+    private enum TurnType { None, PlayerA, PlayerB }
 
     private enum GameResult
     {
@@ -45,6 +45,16 @@ public class GameManager : Singleton<GameManager>
         {
             var settingsPanelObject = Instantiate(settingsPanel, _canvas.transform);
             settingsPanelObject.GetComponent<PanelController>().Show();
+        }
+    }
+
+    public void OpenConfirmPanel(string message, ConfirmPanelController.OnConfirmButtonClick onConfirmButtonClick)
+    {
+        if (_canvas != null)
+        {
+            var confirmPanelObject = Instantiate(confirmPanel, _canvas.transform);
+            confirmPanelObject.GetComponent<ConfirmPanelController>()
+                .Show(message, onConfirmButtonClick);
         }
     }
 
@@ -132,6 +142,7 @@ public class GameManager : Singleton<GameManager>
                                 SetTurn(TurnType.PlayerB);
                             else
                             {
+                                SetTurn(TurnType.None);
                                 EndGame(gameResult);
                             }
                         }
@@ -157,6 +168,7 @@ public class GameManager : Singleton<GameManager>
                                 SetTurn(TurnType.PlayerA);
                             else
                             {
+                                SetTurn(TurnType.None);
                                 EndGame(gameResult);
                             }
                         }
@@ -168,6 +180,12 @@ public class GameManager : Singleton<GameManager>
                     }
                 };
                 break;
+            case TurnType.None:
+                _blockController.onBlockClickedDelegate = (row, col) =>
+                {
+                    _gameUIController.SetGameUIMode(GameUIController.GameUIMode.GameOver);
+                };
+            break;
         }
         
         // 게임 결과 확인
