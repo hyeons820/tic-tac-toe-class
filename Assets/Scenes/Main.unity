@@ -151,6 +151,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25e2a502d003f8740b585944c86afdf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  settingsPanel: {fileID: 168338908736702515, guid: 127af07f9aedb524995547af5a57db7b, type: 3}
+  confirmPanel: {fileID: 8882864786923788588, guid: 72ed867481d8b3742b1489818f0a644b, type: 3}
 --- !u!4 &237003423
 Transform:
   m_ObjectHideFlags: 0
@@ -445,7 +447,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 200}
-  m_SizeDelta: {x: 450, y: 300}
+  m_SizeDelta: {x: 800, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &806094325908438138
 GameObject:
@@ -479,7 +481,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.764151, g: 0.54427737, b: 0.54427737, a: 1}
+  m_Color: {r: 0.8962264, g: 0.65610945, b: 0.612985, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1368,7 +1370,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uD2F1\uD0DD\uD1A0"
+  m_text: TicTacToe
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1f4b7b7959f357a47943bbb896257ab1, type: 2}
   m_sharedMaterial: {fileID: 2225155512216094244, guid: 1f4b7b7959f357a47943bbb896257ab1, type: 2}
@@ -1395,8 +1397,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 150
-  m_fontSizeBase: 150
+  m_fontSize: 130
+  m_fontSizeBase: 130
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
