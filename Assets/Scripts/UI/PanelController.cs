@@ -10,6 +10,8 @@ public class PanelController : MonoBehaviour
 
     private CanvasGroup _backgroundCanvasGroup;                  // 뒤에 검은 배경
     
+    public delegate void PanelControllerHideDelegate();
+    
     private void Awake()
     {
         _backgroundCanvasGroup = GetComponent<CanvasGroup>();
@@ -30,13 +32,17 @@ public class PanelController : MonoBehaviour
     /// <summary>
     /// Panel 숨기기 함수
     /// </summary>
-    public void Hide()
+    public void Hide(PanelControllerHideDelegate hideDelegate = null)
     {
         _backgroundCanvasGroup.alpha = 1;
         panelRectTransform.localScale = Vector3.one;
 
         _backgroundCanvasGroup.DOFade(0, 0.2f).SetEase(Ease.Linear);
         panelRectTransform.DOScale(0, 0.2f)
-            .SetEase(Ease.InBack).OnComplete(() => Destroy(gameObject));
+            .SetEase(Ease.InBack).OnComplete(() =>
+            {
+                hideDelegate?.Invoke();
+                Destroy(gameObject);
+            });
     }
 }
