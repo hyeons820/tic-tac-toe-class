@@ -134,6 +134,7 @@ public class GameManager : Singleton<GameManager>
         {
             case TurnType.PlayerA:
                 _gameUIController.SetGameUIMode(GameUIController.GameUIMode.TurnA);
+                
                 _blockController.onBlockClickedDelegate = (row, col) =>
                 { 
                     if (SetNewBoardValue(PlayerType.PlayerA, row, col))
@@ -150,19 +151,24 @@ public class GameManager : Singleton<GameManager>
                 break;
             case TurnType.PlayerB:
                 _gameUIController.SetGameUIMode(GameUIController.GameUIMode.TurnB);
-                _blockController.onBlockClickedDelegate = (row, col) =>
+                
+                var result = AIController.FindNextMove(_board);
+                if (result.HasValue)
                 {
-                    if (SetNewBoardValue(PlayerType.PlayerB, row, col))
+                    if (SetNewBoardValue(PlayerType.PlayerB, result.Value.row, result.Value.col))
                     {
                         var gameResult = CheckGameResult();
                         if (gameResult == GameResult.None)
                             SetTurn(TurnType.PlayerA);
-                        else
-                        {
+                        else 
                             EndGame(gameResult);
-                        }
                     }
-                };
+                }
+                else
+                {
+                    EndGame(GameResult.Win);
+                }
+                
                 break;
         }
         
