@@ -151,8 +151,8 @@ public class GameManager : Singleton<GameManager>
                 break;
             case TurnType.PlayerB:
                 _gameUIController.SetGameUIMode(GameUIController.GameUIMode.TurnB);
-                
-                var result = AIController.FindNextMove(_board);
+                // var result = AIController.FindNextMove(_board);
+                var result = MiniMaxAIController.GetBestMove(_board);
                 if (result.HasValue)
                 {
                     if (SetNewBoardValue(PlayerType.PlayerB, result.Value.row, result.Value.col))
@@ -202,26 +202,12 @@ public class GameManager : Singleton<GameManager>
     {
         if (CheckGameWin(PlayerType.PlayerA)) { return GameResult.Win; }
         if (CheckGameWin(PlayerType.PlayerB)) { return GameResult.Lose; }
-        if (IsAllBlocksPlaced()) { return GameResult.Draw; }
+        if (MiniMaxAIController.IsAllBlocksPlaced(_board)) { return GameResult.Draw; }
         
         return GameResult.None;
     }
-    
-    // 모든 마커가 보드에 배치 되었는지 확인하는 함수
-    private bool IsAllBlocksPlaced()
-    {
-        for (var row = 0; row < _board.GetLength(0); row++)
-        {
-            for (var col = 0; col < _board.GetLength(1); col++)
-            {
-                if (_board[row, col] == PlayerType.None)
-                    return false;
-            }
-        }
-        return true;
-    }
-    
-    // 게임의 승패를 판단하는 함수
+
+    //게임의 승패를 판단하는 함수
     private bool CheckGameWin(PlayerType playerType)
     {
         // 가로로 마커가 일치하는지 확인
@@ -259,10 +245,10 @@ public class GameManager : Singleton<GameManager>
             _blockController.SetBlockColor(playerType, blocks);
             return true;
         }
-        
+
         return false;
     }
-
+    
     protected override void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (scene.name == "Game")
