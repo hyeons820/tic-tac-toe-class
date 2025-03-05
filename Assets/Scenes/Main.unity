@@ -153,6 +153,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   settingsPanel: {fileID: 168338908736702515, guid: 127af07f9aedb524995547af5a57db7b, type: 3}
   confirmPanel: {fileID: 8882864786923788588, guid: 72ed867481d8b3742b1489818f0a644b, type: 3}
+  signinPanel: {fileID: 8890876676650958962, guid: 6459884cee6619d4f9321c35ed32fc67, type: 3}
+  signupPanel: {fileID: 1844944223864915906, guid: 949f9fb2c4d0c1348bf9c52bf0dd9a54, type: 3}
 --- !u!4 &237003423
 Transform:
   m_ObjectHideFlags: 0
@@ -488,7 +490,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 0}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -635,7 +637,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 7427bfd7f06d00f46b6030c4c1e12cab, type: 3}
-  m_Type: 0
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -844,7 +846,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 7427bfd7f06d00f46b6030c4c1e12cab, type: 3}
-  m_Type: 0
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -874,7 +876,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 7427bfd7f06d00f46b6030c4c1e12cab, type: 3}
-  m_Type: 0
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4

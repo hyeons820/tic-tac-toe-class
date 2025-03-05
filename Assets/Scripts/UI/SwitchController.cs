@@ -32,7 +32,7 @@ public class SwitchController : MonoBehaviour
         _audioSource = GetComponent<AudioSource>();
     }
 
-    public void Start()
+    private void Start()
     {
         _handleRectTransform.anchoredPosition = new Vector2(-14, 0);
         _backgroundImage.color = _offColor;
@@ -51,10 +51,7 @@ public class SwitchController : MonoBehaviour
             _handleRectTransform.DOAnchorPosX(-14, 0.2f);
             _backgroundImage.DOBlendableColor(_offColor, 0.2f);
         }
-        
-        // 효과음 재생
-        if (OnSwitchChanged != null)
-            _audioSource.PlayOneShot(clickSound);
+        _audioSource.PlayOneShot(clickSound);
         
         OnSwitchChanged?.Invoke(isOn);
         _isOn = isOn;

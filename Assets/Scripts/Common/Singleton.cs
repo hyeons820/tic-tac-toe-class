@@ -33,14 +33,15 @@ public abstract class Singleton<T> : MonoBehaviour where T : Component
         {
             _instance = this as T;
             DontDestroyOnLoad(gameObject);
+            
+            // 씬 전환시 호출되는 액션 메서드 할당
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else
         {
             Destroy(gameObject);
         }
         
-        // 씬 전환시 호출되는 액션 메서드 할당
-        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     protected abstract void OnSceneLoaded(Scene scene, LoadSceneMode mode);

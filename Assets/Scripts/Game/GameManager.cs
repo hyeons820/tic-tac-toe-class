@@ -9,28 +9,48 @@ public class GameManager : Singleton<GameManager>
 {
     [SerializeField] private GameObject settingsPanel;
     [SerializeField] private GameObject confirmPanel;
-    
+    [SerializeField] private GameObject signinPanel;
+    [SerializeField] private GameObject signupPanel;
+
     private BlockController _blockController;
     private GameUIController _gameUIController;
     private Canvas _canvas;
-    
-    public enum PlayerType { None, PlayerA, PlayerB }
+
+    public enum PlayerType
+    {
+        None,
+        PlayerA,
+        PlayerB
+    }
+
     private PlayerType[,] _board;
 
-    private enum TurnType { PlayerA, PlayerB }
+    private enum TurnType
+    {
+        PlayerA,
+        PlayerB
+    }
 
     private enum GameResult
     {
-        None,   // 게임 진행 중
-        Win,    // 플레이어 승
-        Lose,   // 플레이어 패
-        Draw    // 비김
+        None, // 게임 진행 중
+        Win, // 플레이어 승
+        Lose, // 플레이어 패
+        Draw // 비김
     }
 
     public enum GameType { SinglePlayer, DualPlayer }
-    
+    private GameType _gameType;
+
+    private void Start()
+    {
+        // 로그인
+        OpenSigninPanel();
+    }
+
     public void ChangeToGameScene(GameType gameType)
     {
+        _gameType = gameType;
         SceneManager.LoadScene("Game");
     }
 
@@ -58,7 +78,23 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    /// <summary>
+    public void OpenSigninPanel()
+    {
+        if (_canvas != null)
+        {
+            var signinPanelObejct = Instantiate(signinPanel, _canvas.transform);
+        }
+    }
+
+    public void OpenSignupPanel()
+    {
+        if (_canvas != null)
+        {
+            var signupPanelObejct = Instantiate(signupPanel, _canvas.transform);
+        }
+    }
+
+/// <summary>
     /// 게임 시작
     /// </summary>
     private void StartGame()
@@ -74,6 +110,8 @@ public class GameManager : Singleton<GameManager>
 
         // 턴 시작
         SetTurn(TurnType.PlayerA);
+        
+        Debug.Log(_gameType);
     }
     
     /// <summary>
@@ -91,10 +129,10 @@ public class GameManager : Singleton<GameManager>
         switch (gameResult)
         {
             case GameResult.Win:
-                Debug.Log("Player win!");
+                Debug.Log("Player1 win!");
                 break;
             case GameResult.Lose:
-                Debug.Log("Player lost!");
+                Debug.Log("Player2 win!");
                 break;
             case GameResult.Draw:
                 Debug.Log("Draw!");
@@ -134,7 +172,6 @@ public class GameManager : Singleton<GameManager>
         {
             case TurnType.PlayerA:
                 _gameUIController.SetGameUIMode(GameUIController.GameUIMode.TurnA);
-                
                 _blockController.onBlockClickedDelegate = (row, col) =>
                 { 
                     if (SetNewBoardValue(PlayerType.PlayerA, row, col))
@@ -151,46 +188,50 @@ public class GameManager : Singleton<GameManager>
                 break;
             case TurnType.PlayerB:
                 _gameUIController.SetGameUIMode(GameUIController.GameUIMode.TurnB);
-                // var result = AIController.FindNextMove(_board);
-                var result = MiniMaxAIController.GetBestMove(_board);
-                if (result.HasValue)
+                if (_gameType == GameType.SinglePlayer)
                 {
-                    if (SetNewBoardValue(PlayerType.PlayerB, result.Value.row, result.Value.col))
+                    var result = MiniMaxAIController.GetBestMove(_board);
+                    if (result.HasValue)
                     {
-                        var gameResult = CheckGameResult();
-                        if (gameResult == GameResult.None)
-                            SetTurn(TurnType.PlayerA);
-                        else 
-                            EndGame(gameResult);
+                        if (SetNewBoardValue(PlayerType.PlayerB, result.Value.row, result.Value.col))
+                        {
+                            var gameResult = CheckGameResult();
+                            if (gameResult == GameResult.None)
+                                SetTurn(TurnType.PlayerA);
+                            else
+                                EndGame(gameResult);
+                        }
+                        else
+                        {
+                            // TODO: 이미 있는 곳을 터치했을 때 처리
+                        }
                     }
+                    else
+                    {
+                        EndGame(GameResult.Win);
+                    }
+                    break;
                 }
-                else
+                if (_gameType == GameType.DualPlayer)
                 {
-                    EndGame(GameResult.Win);
+                    _blockController.onBlockClickedDelegate = (row, col) =>
+                    {
+                        if (SetNewBoardValue(PlayerType.PlayerB, row, col))
+                        {
+                            var gameResult = CheckGameResult();
+                            if (gameResult == GameResult.None)
+                                SetTurn(TurnType.PlayerA);
+                            else
+                                EndGame(gameResult);
+                        }
+                        else
+                        {
+                            // TODO: 이미 있는 곳을 터치했을 때 처리
+                        }
+                    };
                 }
-                
                 break;
         }
-        
-        // 게임 결과 확인
-        /*switch (CheckGameResult())
-        {
-            case GameResult.Win:
-                // TODO: 승리 결과창 표시
-                break;
-            case GameResult.Lose:
-                // TODO: 패배 결과창 표시
-                break;
-            case GameResult.Draw:
-                // TODO: 비김 결과창 표시
-                break;
-            case GameResult.None:
-                // 게임이 종료되지 않았다면, 턴 변경
-                var nextTurn = turnType == TurnType.PlayerA ? TurnType.PlayerB : TurnType.PlayerA;
-                SetTurn(nextTurn);
-                break;
-        }*/
-        
     }
     
         
