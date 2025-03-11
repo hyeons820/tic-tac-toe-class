@@ -6,7 +6,7 @@ using UnityEngine;
 
 public static class MiniMaxAIController
 {
-    public static (int row, int col)? GetBestMove(GameManager.PlayerType[,] board)
+    public static (int row, int col)? GetBestMove(Constants.PlayerType[,] board)
     {
         float bestScore = -1000;
         (int row, int col)? bestMove = null;
@@ -15,11 +15,11 @@ public static class MiniMaxAIController
         {
             for (var col = 0; col < board.GetLength(1); col++)
             {
-                if (board[row, col] == GameManager.PlayerType.None)
+                if (board[row, col] == Constants.PlayerType.None)
                 {
-                    board[row, col] = GameManager.PlayerType.PlayerB;
+                    board[row, col] = Constants.PlayerType.PlayerB;
                     var score = DoMiniMax(board, 0, false);
-                    board[row, col] = GameManager.PlayerType.None;
+                    board[row, col] = Constants.PlayerType.None;
 
                     if (score > bestScore)
                     {
@@ -33,11 +33,11 @@ public static class MiniMaxAIController
         return bestMove;
     }
     
-    private static float DoMiniMax(GameManager.PlayerType[,] board, int depth, bool isMaximizing)
+    private static float DoMiniMax(Constants.PlayerType[,] board, int depth, bool isMaximizing)
     {
-        if (CheckGameWin(GameManager.PlayerType.PlayerA, board))
+        if (CheckGameWin(Constants.PlayerType.PlayerA, board))
             return -10 + depth;
-        if (CheckGameWin(GameManager.PlayerType.PlayerB, board))
+        if (CheckGameWin(Constants.PlayerType.PlayerB, board))
             return 10 - depth;
         if (IsAllBlocksPlaced(board))
             return 0;
@@ -49,11 +49,11 @@ public static class MiniMaxAIController
             {
                 for (var col = 0; col < board.GetLength(1); col++)
                 {
-                    if (board[row, col] == GameManager.PlayerType.None)
+                    if (board[row, col] == Constants.PlayerType.None)
                     {
-                        board[row, col] = GameManager.PlayerType.PlayerB;
+                        board[row, col] = Constants.PlayerType.PlayerB;
                         var score = DoMiniMax(board, depth + 1, false);
-                        board[row, col] = GameManager.PlayerType.None;
+                        board[row, col] = Constants.PlayerType.None;
                         bestScore = Math.Max(bestScore, score);
                     }
                 }
@@ -67,11 +67,11 @@ public static class MiniMaxAIController
             {
                 for (var col = 0; col < board.GetLength(1); col++)
                 {
-                    if (board[row, col] == GameManager.PlayerType.None)
+                    if (board[row, col] == Constants.PlayerType.None)
                     {
-                        board[row, col] = GameManager.PlayerType.PlayerA;
+                        board[row, col] = Constants.PlayerType.PlayerA;
                         var score = DoMiniMax(board, depth + 1, true);
-                        board[row, col] = GameManager.PlayerType.None;
+                        board[row, col] = Constants.PlayerType.None;
                         bestScore = Math.Min(bestScore, score);
                     }
                 }
@@ -84,13 +84,13 @@ public static class MiniMaxAIController
     /// 모든 마커가 보드에 배치 되었는지 확인하는 함수
     /// </summary>
     /// <returns>True : 모두 배치</returns>
-    public static bool IsAllBlocksPlaced(GameManager.PlayerType[,] board)
+    public static bool IsAllBlocksPlaced(Constants.PlayerType[,] board)
     {
         for (var row = 0; row < board.GetLength(0); row++)
         {
             for (var col = 0; col < board.GetLength(1); col++)
             {
-                if (board[row, col] == GameManager.PlayerType.None)
+                if (board[row, col] == Constants.PlayerType.None)
                     return false;
             }
         }
@@ -103,7 +103,7 @@ public static class MiniMaxAIController
     /// <param name="playerType"></param>
     /// <param name="board"></param>
     /// <returns></returns>
-    private static bool CheckGameWin(GameManager.PlayerType playerType, GameManager.PlayerType[,] board)
+    private static bool CheckGameWin(Constants.PlayerType playerType, Constants.PlayerType[,] board)
     {
         // 가로로 마커가 일치하는지 확인
         for (var row = 0; row < board.GetLength(0); row++)

@@ -5,7 +5,7 @@ public class BlockController : MonoBehaviour
     [SerializeField] private Block[] blocks;
 
     public delegate void OnBlockClicked(int row, int col);
-    public OnBlockClicked onBlockClickedDelegate;
+    public OnBlockClicked OnBlockClickedDelegate;
     
     public void InitBlocks()
     {
@@ -16,7 +16,7 @@ public class BlockController : MonoBehaviour
                 var clickedRow = blockIndex / 3;
                 var clickedCol = blockIndex % 3;
                 
-                onBlockClickedDelegate?.Invoke(clickedRow, clickedCol);
+                OnBlockClickedDelegate?.Invoke(clickedRow, clickedCol);
             });
         }
     }
@@ -37,18 +37,18 @@ public class BlockController : MonoBehaviour
     }
     
     
-    public void SetBlockColor(GameManager.PlayerType playerType, 
+    public void SetBlockColor(Constants.PlayerType playerType, 
         (int row, int col)[] blockPositions)
     {
-        if (playerType == GameManager.PlayerType.None) return;
+        if (playerType == Constants.PlayerType.None) return;
 
         foreach (var blockPosition in blockPositions)
         {
             var blockIndex = blockPosition.row * 3 + blockPosition.col;
             Color32 markerColor;
-            if (playerType == GameManager.PlayerType.PlayerA)
+            if (playerType == Constants.PlayerType.PlayerA)
                 markerColor = new Color32(0, 166, 255, 255);
-            else if (playerType == GameManager.PlayerType.PlayerB)
+            else if (playerType == Constants.PlayerType.PlayerB)
                 markerColor = new Color32(255, 0, 94, 255);
             else
                 markerColor = Color.black;

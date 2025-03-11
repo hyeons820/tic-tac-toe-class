@@ -75,6 +75,14 @@ public class NetworkManager : Singleton<NetworkManager>
             }
             else
             {
+                var cookie = www.GetResponseHeader("set-cookie");
+                if (!string.IsNullOrEmpty(cookie))
+                {
+                    int lastIndex = cookie.LastIndexOf(";");
+                    string sid = cookie.Substring(0, lastIndex);
+                    PlayerPrefs.SetString("sid", sid);
+                }
+                
                 var resultString = www.downloadHandler.text;
                 var result = JsonUtility.FromJson<SigninResult>(resultString);
 
@@ -104,5 +112,103 @@ public class NetworkManager : Singleton<NetworkManager>
                 }
             }
         }
+    }
+    
+    public IEnumerator GetScore(Action<ScoreResult> success, Action failure)
+    {
+        using (UnityWebRequest www = 
+               new UnityWebRequest(Constants.ServerURL + "/users/score", UnityWebRequest.kHttpVerbGET))
+        {
+            www.downloadHandler = new DownloadHandlerBuffer();
+            
+            string sid = PlayerPrefs.GetString("sid", "");
+            if (!string.IsNullOrEmpty(sid))
+            {
+                www.SetRequestHeader("Cookie", sid);
+            }
+            
+            yield return www.SendWebRequest();
+
+            if (www.result == UnityWebRequest.Result.ConnectionError ||
+                www.result == UnityWebRequest.Result.ProtocolError)
+            {
+                if (www.responseCode == 403)
+                {
+                    Debug.Log("로그인이 필요합니다.");
+                }
+                
+                failure?.Invoke();
+            }
+            else
+            {
+                var result = www.downloadHandler.text;
+                var userScore = JsonUtility.FromJson<ScoreResult>(result);
+
+                Debug.Log(userScore.score);
+                
+                success?.Invoke(userScore);
+            }
+        }
+    }
+
+    public IEnumerator GetLeaderboard(Action<Scores> success, Action failure)
+    {
+        using (UnityWebRequest www = 
+               new UnityWebRequest(Constants.ServerURL + "/leaderboard", UnityWebRequest.kHttpVerbGET))
+        {
+            www.downloadHandler = new DownloadHandlerBuffer();
+            
+            string sid = PlayerPrefs.GetString("sid", "");
+            if (!string.IsNullOrEmpty(sid))
+            {
+                www.SetRequestHeader("Cookie", sid);
+            }
+            
+            yield return www.SendWebRequest();
+
+            if (www.result == UnityWebRequest.Result.ConnectionError ||
+                www.result == UnityWebRequest.Result.ProtocolError)
+            {
+                if (www.responseCode == 403)
+                {
+                    Debug.Log("로그인이 필요합니다.");
+                }
+                
+                failure?.Invoke();
+            }
+            else
+            {
+                var result = www.downloadHandler.text;
+                var scores = JsonUtility.FromJson<Scores>(result);
+                
+                success?.Invoke(scores);
+            }
+        }
+    }
+
+    public void CheckSession()
+    {
+        StartCoroutine(CheckSessionAndProceed());
+    }
+
+    public IEnumerator CheckSessionAndProceed()
+    {
+        string sid = PlayerPrefs.GetString("sid", "");
+        if (string.IsNullOrEmpty(sid))
+        {
+            // 세션 id가 없으면 로그인 화면
+            GameManager.Instance.OpenSigninPanel();
+            yield break;
+        }
+        
+        // 세션 id가 있으면 점수 조회로 유효성 확인
+        yield return GetScore(success: userInfo =>
+        {
+            Debug.Log($"자동 로그인 성공! 사용자: {userInfo.username}, 점수: {userInfo.score}");
+            GameManager.Instance.ChangeToMainScene();
+        }, failure: () =>
+        {
+            GameManager.Instance.OpenSigninPanel();
+        });
     }
 }

@@ -28,8 +28,11 @@ public class SignupPanelController : MonoBehaviour
 
         if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(nickname) ||
             string.IsNullOrEmpty(password) || string.IsNullOrEmpty(confirmPassword))
-        {
-            // TODO: 입력값이 비어있음을 알리는 팝업창 표시
+        { 
+            GameManager.Instance.OpenConfirmPanel("입력 내용이 누락되었습니다.", () =>
+            {
+                
+            });
             return;
         }
 
@@ -51,6 +54,14 @@ public class SignupPanelController : MonoBehaviour
                 _passwordInputField.text = "";
                 _confirmPasswordInputField.text = "";
             }));
+        }
+        else
+        {
+            GameManager.Instance.OpenConfirmPanel("비밀번호가 서로 다릅니다.", () =>
+            {
+                _passwordInputField.text = "";
+                _confirmPasswordInputField.text = "";
+            });
         }
     }
 

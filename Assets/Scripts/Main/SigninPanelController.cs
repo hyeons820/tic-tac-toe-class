@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -13,6 +14,28 @@ public struct SigninData
 public struct SigninResult
 {
     public int result;
+}
+
+public struct ScoreResult
+{
+    public string id;
+    public string username;
+    public string nickname;
+    public int score;
+}
+
+[Serializable]
+public struct ScoreInfo
+{
+    public string username;
+    public string nickname;
+    public int score;
+}
+
+[Serializable]
+public struct Scores
+{
+    public ScoreInfo[] scores;
 }
 
 public class SigninPanelController : MonoBehaviour
